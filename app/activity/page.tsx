@@ -30,6 +30,8 @@ const githubStats = {
 
 // DSA videos (YouTube) provided by user
 const dsaVideos = [
+  { title: "DSA Video 6", videoId: "_Z3HYfKOyWU", channel: "YouTube" },
+  { title: "DSA Video 7", videoId: "KyqPcgJwRIU", channel: "YouTube" },
   { title: "DSA Video 1", videoId: "O-H7M5X9K1w", channel: "YouTube" },
   { title: "DSA Video 2", videoId: "jkv2ozve5rI", channel: "YouTube" },
   { title: "DSA Video 3", videoId: "pO9kNy0lKBo", channel: "YouTube" },
@@ -111,9 +113,9 @@ export default function ActivityPage() {
               My <span className="text-primary">Activity</span>
             </h1>
             <div className="flex space-x-4 mt-4">
-              <a 
-                href={mergedGithub.profileUrl} 
-                target="_blank" 
+              <a
+                href={mergedGithub.profileUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-muted-foreground hover:text-foreground transition-colors"
                 aria-label="GitHub Profile"
@@ -131,22 +133,20 @@ export default function ActivityPage() {
         <div className="flex justify-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
           <button
             onClick={() => setActiveTab("github")}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === "github"
+            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === "github"
                 ? "bg-primary text-primary-foreground shadow-lg scale-105"
                 : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
-            }`}
+              }`}
           >
             <Github className="w-5 h-5" />
             <span>GitHub Activity</span>
           </button>
           <button
             onClick={() => setActiveTab("dsa")}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${
-              activeTab === "dsa"
+            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === "dsa"
                 ? "bg-primary text-primary-foreground shadow-lg scale-105"
                 : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
-            }`}
+              }`}
           >
             <Youtube className="w-5 h-5" />
             <span>DSA Videos</span>
@@ -158,9 +158,9 @@ export default function ActivityPage() {
           <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
             {/* GitHub Stats Cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <a 
-                href={mergedGithub.profileUrl} 
-                target="_blank" 
+              <a
+                href={mergedGithub.profileUrl}
+                target="_blank"
                 rel="noopener noreferrer"
                 className="block bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50"
               >
@@ -208,8 +208,8 @@ export default function ActivityPage() {
                           className="h-2 rounded-full transition-all duration-1000 ease-out"
                           style={{
                             backgroundColor: (lang as any).color ?? 'var(--primary)',
-                            width: `${lang.percentage}%` ,
-                            animationDelay: `${index * 0.1}s` ,
+                            width: `${lang.percentage}%`,
+                            animationDelay: `${index * 0.1}s`,
                           }}
                         />
                       </div>
