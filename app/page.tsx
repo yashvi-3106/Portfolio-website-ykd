@@ -161,7 +161,7 @@ export default function HomePage() {
       <section className="container max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-12 gap-8">
 
         {/* Intro Video Card */}
-        <BentoCard className="md:col-span-12 lg:col-span-8 p-0 border-none bg-transparent">
+        <BentoCard className="md:col-span-12 lg:col-span-8 p-0 border-none bg-transparent" data-text="PLAY_REEL">
           <div className="relative h-full w-full rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#111]">
             <div className="absolute top-8 left-8 z-10 space-y-2">
               <div className="flex items-center gap-3">
@@ -230,7 +230,7 @@ export default function HomePage() {
         </BentoCard>
 
         <BentoCard className="md:col-span-6 lg:col-span-4 p-0">
-          <Link href="/projects" className="group flex flex-col h-full bg-white text-black p-8 hover:bg-primary hover:text-white transition-all duration-500">
+          <Link href="/projects" data-text="VIEW_RECORDS" className="group flex flex-col h-full bg-white text-black p-8 hover:bg-primary hover:text-white transition-all duration-500">
             <div className="flex justify-between items-start mb-12">
               <ExternalLink className="w-10 h-10 -translate-x-1" />
               <ArrowRight className="w-6 h-6 transform group-hover:translate-x-2 transition-transform" />
@@ -252,11 +252,11 @@ export default function HomePage() {
                 { icon: Linkedin, href: "#" },
                 { icon: Mail, href: "mailto:yashvidholakiya.cg@gmail.com" }
               ].map((social, i) => (
-                <a key={i} href={social.href} className="p-4 rounded-2xl bg-white/5 hover:bg-primary transition-all hover:-translate-y-2">
+                <a key={i} href={social.href} data-text="CONNECT" className="p-4 rounded-2xl bg-white/5 hover:bg-primary transition-all hover:-translate-y-2">
                   <social.icon className="w-6 h-6" />
                 </a>
               ))}
-              <Link href="/resume" className="p-4 rounded-2xl bg-primary text-white hover:scale-110 shadow-lg transition-all">
+              <Link href="/resume" data-text="DOWNLOAD" className="p-4 rounded-2xl bg-primary text-white hover:scale-110 shadow-lg transition-all">
                 <Download className="w-6 h-6" />
               </Link>
             </div>
@@ -271,10 +271,10 @@ export default function HomePage() {
         <div className="container mx-auto px-6 relative z-10 flex flex-col items-center gap-12 text-center">
           <h2 className="text-5xl md:text-7xl font-black tracking-[-0.05em] text-white opacity-20 hover:opacity-100 transition-opacity duration-700 cursor-default">YASHVI DHOLAKIYA</h2>
           <div className="flex flex-wrap justify-center gap-8 text-[10px] font-black tracking-[0.4em] uppercase text-muted-foreground/40">
-            <Link href="/about" className="hover:text-primary transition-colors">Information</Link>
-            <Link href="/projects" className="hover:text-primary transition-colors">Records</Link>
-            <Link href="/activity" className="hover:text-primary transition-colors">Stream</Link>
-            <Link href="/certificates" className="hover:text-primary transition-colors">Verification</Link>
+            <Link href="/about" data-text="INFO" className="hover:text-primary transition-colors">Information</Link>
+            <Link href="/projects" data-text="RECORDS" className="hover:text-primary transition-colors">Records</Link>
+            <Link href="/activity" data-text="STREAM" className="hover:text-primary transition-colors">Stream</Link>
+            <Link href="/certificates" data-text="VERIFY" className="hover:text-primary transition-colors">Verification</Link>
           </div>
         </div>
       </footer>

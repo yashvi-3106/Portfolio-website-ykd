@@ -107,7 +107,7 @@ const openSourceProjects = [
     role: "Contributor",
     videoUrl: "https://www.youtube.com/embed/mg-Qrj5eXdw"
   },
-    {
+  {
     id: 1,
     title: "Noble Bids",
     description: "Real-time auction platform with WebSocket integration for live bidding updates. Implements complex state synchronization.",
@@ -195,6 +195,7 @@ const RepoItem = ({ repo, index }: { repo: any, index: number }) => {
     >
       <div
         onClick={() => setIsOpen(!isOpen)}
+        data-text="EXPAND"
         className="group relative flex items-center justify-between p-6 cursor-pointer hover:bg-primary/5 transition-colors"
       >
         <div className="flex-1 pr-6 text-left">
@@ -268,6 +269,7 @@ const DesignCard = ({ item }: { item: any }) => (
     href={item.url}
     target="_blank"
     rel="noopener"
+    data-text="FIGMA"
     className={`group relative overflow-hidden rounded-3xl bg-card border border-border/50 hover:border-primary/50 transition-all duration-500 shadow-xl ${item.span || 'col-span-1'}`}
     initial={{ opacity: 0, scale: 0.95 }}
     whileInView={{ opacity: 1, scale: 1 }}
@@ -327,10 +329,10 @@ const CloneCard = ({ item }: { item: any }) => (
         className="object-cover transition-transform duration-700 group-hover:scale-105 origin-top"
       />
       <div className="absolute inset-0 bg-background/80 backdrop-blur-[4px] opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-        <a href={item.liveUrl} target="_blank" className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-bold text-xs uppercase tracking-wider transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
+        <a href={item.liveUrl} target="_blank" data-text="LIVE_DEMO" className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-primary text-primary-foreground font-bold text-xs uppercase tracking-wider transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
           <ExternalLink className="w-3 h-3" /> Live Demo
         </a>
-        <a href={item.githubUrl} target="_blank" className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-card border border-border text-foreground font-bold text-xs uppercase tracking-wider hover:bg-muted transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
+        <a href={item.githubUrl} target="_blank" data-text="CODE" className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-card border border-border text-foreground font-bold text-xs uppercase tracking-wider hover:bg-muted transform translate-y-4 group-hover:translate-y-0 transition-all duration-300 shadow-lg">
           <Github className="w-3 h-3" /> Code
         </a>
       </div>
@@ -390,12 +392,12 @@ const ProjectCard = ({ project }: { project: any }) => {
 
           <div className="flex items-center gap-6 pt-4">
             {project.liveUrl && (
-              <a href={project.liveUrl} target="_blank" className="group/btn flex items-center gap-3 text-white hover:text-primary transition-colors text-xs font-black uppercase tracking-widest">
+              <a href={project.liveUrl} target="_blank" data-text="EXPLORE" className="group/btn flex items-center gap-3 text-white hover:text-primary transition-colors text-xs font-black uppercase tracking-widest">
                 Observe_Live <ExternalLink className="w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
               </a>
             )}
             {project.githubUrl && (
-              <a href={project.githubUrl} target="_blank" className="p-3 rounded-full bg-white/5 border border-white/10 hover:border-primary transition-colors">
+              <a href={project.githubUrl} target="_blank" data-text="CODE" className="p-3 rounded-full bg-white/5 border border-white/10 hover:border-primary transition-colors">
                 <Github className="w-5 h-5 text-white/40" />
               </a>
             )}
@@ -436,6 +438,7 @@ export default function ProjectsPage() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
+              data-text="FILTER"
               className={`px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-[0.3em] transition-all flex items-center gap-2 ${activeTab === tab.id ? "bg-white text-black scale-110 shadow-[0_0_40px_rgba(255,255,255,0.2)]" : "bg-white/5 text-white/40 hover:bg-white/10"}`}
             >
               <tab.icon className="w-3 h-3" />

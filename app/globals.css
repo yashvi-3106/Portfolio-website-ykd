@@ -384,11 +384,25 @@ body.custom-cursor {
   cursor: none;
 }
 
+body.custom-cursor a,
+body.custom-cursor button,
+body.custom-cursor [role="button"] {
+  cursor: none;
+}
+
 .cursor-container {
   position: fixed;
   inset: 0;
   pointer-events: none;
+  z-index: 10000;
+}
+
+.cursor-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   z-index: 9999;
+  mix-blend-mode: difference;
 }
 
 .cursor-dot,
@@ -397,21 +411,81 @@ body.custom-cursor {
   left: 0;
   top: 0;
   transform: translate(-100px, -100px);
+  will-change: transform;
 }
 
 .cursor-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 9999px;
-  background: var(--primary);
-  box-shadow: 0 0 10px color-mix(in oklch, var(--primary), white 30%);
+  background: white;
+  mix-blend-mode: difference;
+  z-index: 10001;
+  transition: width 0.3s ease, height 0.3s ease;
 }
 
 .cursor-ring {
-  width: 28px;
-  height: 28px;
+  width: 40px;
+  height: 40px;
   border-radius: 9999px;
-  border: 2px solid color-mix(in oklch, var(--primary), white 25%);
-  box-shadow: 0 0 20px color-mix(in oklch, var(--primary), white 35%);
-  backdrop-filter: blur(2px);
+  border: 1.5px solid white;
+  mix-blend-mode: difference;
+  z-index: 10000;
+  transition: width 0.3s cubic-bezier(0.23, 1, 0.32, 1), height 0.3s cubic-bezier(0.23, 1, 0.32, 1), border 0.3s ease;
+}
+
+/* Cyber-Deck Navigation Utilities */
+.cyber-pill {
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    0 4px 24px -1px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.cyber-indicator {
+  box-shadow:
+    0 0 20px rgba(255, 255, 255, 0.2),
+    0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+.scanline-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanline-effect::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom,
+      transparent,
+      rgba(255, 255, 255, 0.05) 50%,
+      transparent);
+  height: 100%;
+  animation: scanline 4s linear infinite;
+  pointer-events: none;
+}
+
+/* Hover state for cursor */
+.cursor-container.is-hovering .cursor-ring {
+  width: 80px;
+  height: 80px;
+  background: white;
+  border-color: transparent;
+}
+
+.cursor-container.is-hovering .cursor-dot {
+  width: 0;
+  height: 0;
+  opacity: 0;
 }

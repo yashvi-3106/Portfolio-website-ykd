@@ -7,6 +7,7 @@ import Navigation from "@/components/navigation"
 import { Suspense } from "react"
 import RootShell from "@/components/RootShell"
 import SmoothScroll from "@/components/SmoothScroll"
+import CustomCursor from "@/components/CustomCursor"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -23,6 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
+        <CustomCursor />
         <Suspense fallback={<div>Loading...</div>}>
           <RootShell>
             {/* Native Scroll for performance isolation */}

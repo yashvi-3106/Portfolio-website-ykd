@@ -127,7 +127,7 @@ export default function AboutPage() {
           {/* 1. Profile Bio (Large) */}
           <BentoCard className="md:col-span-8 md:row-span-2 flex flex-col justify-between" delay={0.1}>
             <div className="space-y-8">
-              <div className="flex items-center gap-6">
+              <div className="flex items-center gap-6" data-text="SYSTEM_ADMIN">
                 <div className="w-24 h-24 rounded-3xl overflow-hidden border-4 border-primary/20 shadow-2xl skew-x-3 hover:skew-x-0 transition-transform duration-500">
                   <Image
                     src="https://ik.imagekit.io/viik8o1ol/WhatsApp%20Image%202025-04-23%20at%2013.53.40_81c4f6f8.jpg"
@@ -154,13 +154,13 @@ export default function AboutPage() {
             </div>
 
             <div className="mt-12 pt-8 border-t border-border/20 flex flex-wrap gap-8 items-center">
-              <Link href="mailto:yashvidholakiya.cg@gmail.com" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
+              <Link href="mailto:yashvidholakiya.cg@gmail.com" data-text="TRANSMIT" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
                 <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary group-hover:text-white transition-colors">
                   <Mail className="w-4 h-4" />
                 </div>
                 Transmit Message
               </Link>
-              <Link href="https://github.com/yashvi-3106" target="_blank" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
+              <Link href="https://github.com/yashvi-3106" target="_blank" data-text="GIT_HUB" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
                 <div className="p-2 rounded-lg bg-muted/50 group-hover:bg-primary group-hover:text-white transition-colors">
                   <Github className="w-4 h-4" />
                 </div>
@@ -170,7 +170,7 @@ export default function AboutPage() {
           </BentoCard>
 
           {/* 2. Map / Location */}
-          <BentoCard className="md:col-span-4 bg-primary/5 flex flex-col items-center justify-center text-center gap-6 group" delay={0.2}>
+          <BentoCard className="md:col-span-4 bg-primary/5 flex flex-col items-center justify-center text-center gap-6 group" delay={0.2} data-text="GUJARAT">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 group-hover:bg-primary/40 transition-colors" />
               <div className="relative w-20 h-20 bg-card rounded-3xl border border-border flex items-center justify-center shadow-2xl transform group-hover:rotate-12 transition-transform duration-500">
@@ -184,7 +184,7 @@ export default function AboutPage() {
           </BentoCard>
 
           {/* 3. Education (Stats style) */}
-          <BentoCard className="md:col-span-4 bg-primary text-primary-foreground border-none flex flex-col justify-between" delay={0.3}>
+          <BentoCard className="md:col-span-4 bg-primary text-primary-foreground border-none flex flex-col justify-between" delay={0.3} data-text="ACADEMIA">
             <Award className="w-12 h-12 mb-6 opacity-50" />
             <div className="space-y-1 text-left">
               <h3 className="text-6xl font-black">9.76</h3>
@@ -196,7 +196,7 @@ export default function AboutPage() {
           </BentoCard>
 
           {/* 4. Skills Registry (Categorized) */}
-          <BentoCard className="md:col-span-12" delay={0.4}>
+          <BentoCard className="md:col-span-12" delay={0.4} data-text="TECH_STACK">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
               {/* Languages & Frameworks */}
@@ -255,7 +255,7 @@ export default function AboutPage() {
           </BentoCard>
 
           {/* 5. LinkedIn / Social */}
-          <BentoCard className="md:col-span-4 bg-[#0A66C2] text-white flex flex-col justify-between border-none group cursor-pointer" delay={0.5}>
+          <BentoCard className="md:col-span-4 bg-[#0A66C2] text-white flex flex-col justify-between border-none group cursor-pointer" delay={0.5} data-text="CONNECT">
             <div className="flex justify-between items-start">
               <Linkedin className="w-10 h-10" />
               <div className="p-3 bg-white/20 rounded-2xl group-hover:bg-white group-hover:text-[#0A66C2] transition-all">
@@ -290,7 +290,7 @@ export default function AboutPage() {
 
         {/* Footer Link Page */}
         <div className="pt-24 flex justify-center">
-          <Link href="/projects" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-all">
+          <Link href="/projects" data-text="REGISTRY" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-all">
             VIEW_RECORDS <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>

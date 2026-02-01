@@ -117,11 +117,11 @@ export default function ResumePage() {
       {/* Controls */}
       <div className="max-w-5xl mx-auto mb-8 flex justify-end gap-2 print:hidden">
         <div className="flex items-center gap-2 bg-card border border-border rounded-lg px-3 py-1 shadow-sm">
-          <button onClick={() => setZoom((z) => Math.max(0.6, z - 0.1))} className="p-1 hover:bg-muted rounded">
+          <button onClick={() => setZoom((z) => Math.max(0.6, z - 0.1))} data-text="ZOOM_OUT" className="p-1 hover:bg-muted rounded">
             <ZoomOut className="w-4 h-4 text-muted-foreground" />
           </button>
           <span className="text-xs font-mono w-12 text-center text-muted-foreground">{Math.round(zoom * 100)}%</span>
-          <button onClick={() => setZoom((z) => Math.min(2, z + 0.1))} className="p-1 hover:bg-muted rounded">
+          <button onClick={() => setZoom((z) => Math.min(2, z + 0.1))} data-text="ZOOM_IN" className="p-1 hover:bg-muted rounded">
             <ZoomIn className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
@@ -129,6 +129,7 @@ export default function ResumePage() {
           href="https://drive.google.com/drive/folders/1qyHEYYK-gw7cKhdiVQ7lPWtI7mbbNz_d"
           target="_blank"
           rel="noopener noreferrer"
+          data-text="DOWNLOAD"
           className="flex items-center gap-2 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors shadow-sm"
         >
           <Download className="w-4 h-4" /> Download PDF
@@ -232,19 +233,19 @@ export default function ResumePage() {
 
             {/* Social Links */}
             <section className="space-y-3">
-              <a href={resumeData.header.linkedinUrl} target="_blank" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
+              <a href={resumeData.header.linkedinUrl} target="_blank" data-text="LINKEDIN" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
                 <div className="w-6 h-6 bg-foreground text-background rounded flex items-center justify-center text-xs font-bold group-hover:bg-primary group-hover:text-primary-foreground">in</div>
                 <span className="underline underline-offset-2">{resumeData.header.linkedin}</span>
               </a>
-              <a href={resumeData.header.leetcodeUrl} target="_blank" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
+              <a href={resumeData.header.leetcodeUrl} target="_blank" data-text="LEETCODE" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
                 <div className="w-6 h-6 flex items-center justify-center font-bold text-lg leading-none">L</div>
                 <span className="underline underline-offset-2">{resumeData.header.leetcode}</span>
               </a>
-              <a href={resumeData.header.githubUrl} target="_blank" className="flex items-center gap-3 text-muted-foreground hover:text-foreground group">
+              <a href={resumeData.header.githubUrl} target="_blank" data-text="GITHUB" className="flex items-center gap-3 text-muted-foreground hover:text-foreground group">
                 <Github className="w-6 h-6" />
                 <span className="underline underline-offset-2">{resumeData.header.github}</span>
               </a>
-              <a href={resumeData.header.portfolioUrl} target="_blank" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
+              <a href={resumeData.header.portfolioUrl} target="_blank" data-text="PORTFOLIO" className="flex items-center gap-3 text-muted-foreground hover:text-primary group">
                 <div className="w-6 h-6 bg-foreground text-background rounded flex items-center justify-center text-xs group-hover:bg-primary group-hover:text-primary-foreground">Pf</div>
                 <span className="underline underline-offset-2">{resumeData.header.portfolio}</span>
               </a>
