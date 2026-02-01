@@ -1,335 +1,300 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import Image from "next/image"
-import { Mail, Github, Linkedin, MapPin, Calendar, GraduationCap } from "lucide-react"
-import { SiReact, SiMongodb, SiNodedotjs, SiExpress, SiCss3, SiTailwindcss, SiMui, SiJavascript, SiFigma, SiHtml5 } from "react-icons/si"
+import Link from "next/link"
+import { motion } from "framer-motion"
+import {
+  MapPin,
+  Mail,
+  Github,
+  Linkedin,
+  ArrowUpRight,
+  Code2,
+  Database,
+  Globe,
+  Cpu,
+  Terminal,
+  Layout,
+  Sparkles,
+  Award,
+  Clock,
+  ArrowRight,
+  Server,
+  Wrench,
+  Layers
+} from "lucide-react"
+import { useState, useEffect } from "react"
 
-const educationData = [
-  {
-    year: "2024-2028",
-    degree: "Bachelor of Technology",
-    field: "Information Technology",
-    institution: "Rai University x CodingGita",
-    grade: "CGPA: 9.76",
-    description: "Specialized in full-stack development, data structures, and software engineering principles.",
-  },
-  {
-    year: "2022-2024",
-    degree: "Higher Secondary Certificate",
-    field: "Science Stream (PCM)",
-    institution: "Bhagwan Mahaavir International School (CBSE)",
-  },
-  {
-    year: "2021-2022",
-    degree: "Secondary School Certificate",
-    institution: "Lancers Army School",
-  },
-]
+// --- Shared Components ---
 
-export default function AboutPage() {
-  const particlesRef = useRef<HTMLCanvasElement>(null)
+const GrainOverlay = () => (
+  <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.015] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat shadow-inner" />
+)
+
+const MeshGradient = () => (
+  <div className="fixed inset-0 -z-10 bg-background overflow-hidden">
+    <div className="absolute top-[-15%] left-[-15%] w-[30%] h-[30%] rounded-full bg-primary/5 blur-[60px]" />
+    <div className="absolute bottom-[-15%] right-[-15%] w-[30%] h-[30%] rounded-full bg-accent/5 blur-[60px]" />
+  </div>
+)
+
+const BentoCard = ({ children, className = "", delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{
+      duration: 0.5,
+      delay
+    }}
+    viewport={{ once: true }}
+    className={`bg-card/80 text-card-foreground border border-border/50 rounded-[2.5rem] p-8 shadow-xl hover:border-primary/20 transition-all group overflow-hidden relative ${className}`}
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="relative z-10 h-full">{children}</div>
+  </motion.div>
+)
+
+const TechPill = ({ icon: Icon, label }: { icon: any, label: string }) => (
+  <div className="flex items-center gap-3 px-4 py-2 bg-muted/30 rounded-full text-xs font-bold tracking-tight text-muted-foreground border border-border/50 group/pill hover:border-primary/30 transition-colors">
+    <Icon className="w-4 h-4 group-hover/pill:text-primary transition-colors" />
+    <span>{label}</span>
+  </div>
+)
+
+const LiveClock = () => {
+  const [time, setTime] = useState(new Date())
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    const canvas = particlesRef.current
-    if (!canvas) return
-
-    const ctx = canvas.getContext("2d")
-    if (!ctx) return
-
-    canvas.width = canvas.offsetWidth
-    canvas.height = canvas.offsetHeight
-
-    const particles: Array<{
-      x: number
-      y: number
-      vx: number
-      vy: number
-      size: number
-      opacity: number
-    }> = []
-
-    // Create particles
-    for (let i = 0; i < 30; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.4 + 0.1,
-      })
-    }
-
-    function animate() {
-      if (!ctx || !canvas) return
-
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-
-      particles.forEach((particle) => {
-        particle.x += particle.vx
-        particle.y += particle.vy
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1
-
-        ctx.beginPath()
-        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(16, 185, 129, ${particle.opacity})`
-        ctx.fill()
-      })
-
-      // Draw connecting lines
-      particles.forEach((particle, i) => {
-        particles.slice(i + 1).forEach((otherParticle) => {
-          const dx = particle.x - otherParticle.x
-          const dy = particle.y - otherParticle.y
-          const distance = Math.sqrt(dx * dx + dy * dy)
-
-          if (distance < 80) {
-            ctx.beginPath()
-            ctx.moveTo(particle.x, particle.y)
-            ctx.lineTo(otherParticle.x, otherParticle.y)
-            ctx.strokeStyle = `rgba(16, 185, 129, ${0.08 * (1 - distance / 80)})`
-            ctx.lineWidth = 0.8
-            ctx.stroke()
-          }
-        })
-      })
-
-      requestAnimationFrame(animate)
-    }
-
-    animate()
-
-    const handleResize = () => {
-      canvas.width = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
-    }
-
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
+    setMounted(true)
+    const timer = setInterval(() => setTime(new Date()), 1000)
+    return () => clearInterval(timer)
   }, [])
 
+  if (!mounted) {
+    return <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground h-[20px]" />
+  }
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 min-h-screen">
-          {/* Left Side - Fixed Card */}
-          <div className="lg:sticky lg:top-30 lg:h-fit">
-            <div className="relative bg-white border border-black rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 animate-fade-in-up">
-              {/* Background Particles */}
-              <canvas
-                ref={particlesRef}
-                className="absolute inset-0 w-full h-full"
-                style={{ background: "transparent", zIndex: 0 }}
-              />
-              {/* Profile Photo */}
-              <div className="relative mb-6 z-10">
-                <div className="w-48 h-48 mx-auto rounded-lg overflow-hidden border-4 border-primary/20 bg-primary animate-float">
+    <div className="flex items-center gap-2 text-sm font-mono text-muted-foreground">
+      <Clock className="w-4 h-4 text-primary" />
+      <span>{time.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+    </div>
+  )
+}
+
+export default function AboutPage() {
+  return (
+    <div className="relative min-h-screen bg-background text-foreground scroll-smooth overflow-x-hidden pb-24">
+      <GrainOverlay />
+      <MeshGradient />
+
+      <div className="container max-w-7xl mx-auto px-6 pt-32 space-y-12">
+
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-12 border-b border-border/20 relative">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-4"
+          >
+            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">
+              ABOUT <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] animate-gradient">MYSYSTEM</span>
+            </h1>
+            <p className="text-2xl text-muted-foreground max-w-2xl font-light leading-relaxed">
+              Full-Stack Engineer dedicated to crafting <span className="text-foreground font-medium">high-performance</span> digital realities.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] px-6 py-3 bg-primary/10 text-primary rounded-full border border-primary/20 shadow-lg glow-primary"
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+            </span>
+            <Sparkles className="w-4 h-4 animate-pulse ml-1" />
+            Direct Access Active
+          </motion.div>
+        </div>
+
+        {/* Bento Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6 auto-rows-auto">
+
+          {/* 1. Profile Bio (Large) */}
+          <BentoCard className="md:col-span-8 md:row-span-2 flex flex-col justify-between" delay={0.1}>
+            <div className="space-y-8">
+              <div className="flex items-center gap-6">
+                <div className="w-24 h-24 rounded-3xl overflow-hidden border-4 border-primary/20 shadow-2xl skew-x-3 hover:skew-x-0 transition-transform duration-500">
                   <Image
                     src="https://ik.imagekit.io/viik8o1ol/WhatsApp%20Image%202025-04-23%20at%2013.53.40_81c4f6f8.jpg"
-                    alt="Yashvi Dholakiya"
-                    width={192}
-                    height={192}
-                    className="w-full h-full object-cover"
+                    alt="Yashvi"
+                    width={96}
+                    height={96}
+                    className="object-cover w-full h-full scale-110"
                   />
                 </div>
-              </div>
-
-              {/* Name */}
-              <div className="relative text-center mb-4 z-10">
-                <h2 className="text-2xl font-bold text-black mb-2">Yashvi Dholakiya</h2>
-              </div>
-
-              {/* Dotted Line with Flame */}
-              <div className="relative flex items-center justify-center mb-4 z-10">
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full border-t border-dashed border-primary"></div>
-                <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.5c-2.24 0-4.3 1.08-5.6 2.9-1.3 1.82-2 4.02-2 6.1 0 2.08.7 4.28 2 6.1 1.3 1.82 3.36 2.9 5.6 2.9 2.24 0 4.3-1.08 5.6-2.9 1.3-1.82 2-4.02 2-6.1 0-2.08-.7-4.28-2-6.1-1.3-1.82-3.36-2.9-5.6-2.9zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
-                  </svg>
+                <div className="text-left">
+                  <h2 className="text-4xl font-black tracking-tighter">YASHVI DHOLAKIYA</h2>
+                  <p className="text-primary font-mono text-sm tracking-widest uppercase mt-1">Foundational Entity</p>
                 </div>
               </div>
 
-              {/* Description */}
-              <div className="relative text-center mb-40 z-10">
-                <p className="text-sm text-black leading-relaxed">
-                  A Full-Stack Developer who has developed countless innovative solutions.
+              <div className="space-y-6 max-w-3xl text-left">
+                <p className="text-xl text-foreground font-medium leading-relaxed">
+                  I engineer full-stack applications with a focus on organized logic and immersive aesthetics.
+                </p>
+                <p className="text-muted-foreground leading-relaxed font-light">
+                  My mission is to transform complex business requirements into seamless, high-speed digital products. Based in India, I've spent thousands of hours mastering the Node-React ecosystem, ensuring that every project I touch is architected for both scale and visual excellence.
                 </p>
               </div>
-                {/* Dotted Line with Flame */}
-                <div className="relative flex items-center justify-center mb-4 z-10">
-                <div className="absolute left-0 top-1/2 transform -translate-y-1/2 w-full border-t border-dashed border-primary"></div>
-                <div className="absolute left-1/2 transform -translate-x-1/2">
-                  <svg className="w-6 h-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2.5c-2.24 0-4.3 1.08-5.6 2.9-1.3 1.82-2 4.02-2 6.1 0 2.08.7 4.28 2 6.1 1.3 1.82 3.36 2.9 5.6 2.9 2.24 0 4.3-1.08 5.6-2.9 1.3-1.82 2-4.02 2-6.1 0-2.08-.7-4.28-2-6.1-1.3-1.82-3.36-2.9-5.6-2.9zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/>
-                  </svg>
-                </div>
-              </div>
+            </div>
 
-              {/* Contact Links */}
-              <div className="relative flex justify-center space-x-4 z-10">
-                <a href="mailto:yashvidholakiya.cg@gmail.com" className="text-primary hover:text-white p-2 rounded-full hover:bg-primary transition-all duration-200" title="Email">
-                  <Mail className="w-6 h-6" />
-                </a>
-                <a href="https://www.linkedin.com/in/yashvi-dholakiya/" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white p-2 rounded-full hover:bg-primary transition-all duration-200" title="LinkedIn">
-                  <Linkedin className="w-6 h-6" />
-                </a>
-                <a href="https://github.com/yashvi-3106" target="_blank" rel="noopener noreferrer" className="text-primary hover:text-white p-2 rounded-full hover:bg-primary transition-all duration-200" title="GitHub">
-                  <Github className="w-6 h-6" />
-                </a>
+            <div className="mt-12 pt-8 border-t border-border/20 flex flex-wrap gap-8 items-center">
+              <Link href="mailto:yashvidholakiya.cg@gmail.com" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
+                <div className="p-2 rounded-lg bg-primary/10 group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Mail className="w-4 h-4" />
+                </div>
+                Transmit Message
+              </Link>
+              <Link href="https://github.com/yashvi-3106" target="_blank" className="group flex items-center gap-3 text-sm font-black uppercase tracking-widest hover:text-primary transition-all">
+                <div className="p-2 rounded-lg bg-muted/50 group-hover:bg-primary group-hover:text-white transition-colors">
+                  <Github className="w-4 h-4" />
+                </div>
+                Codebase Registry
+              </Link>
+            </div>
+          </BentoCard>
+
+          {/* 2. Map / Location */}
+          <BentoCard className="md:col-span-4 bg-primary/5 flex flex-col items-center justify-center text-center gap-6 group" delay={0.2}>
+            <div className="relative">
+              <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 group-hover:bg-primary/40 transition-colors" />
+              <div className="relative w-20 h-20 bg-card rounded-3xl border border-border flex items-center justify-center shadow-2xl transform group-hover:rotate-12 transition-transform duration-500">
+                <MapPin className="w-10 h-10 text-primary" />
               </div>
             </div>
-          </div>
+            <div className="space-y-1">
+              <h3 className="text-2xl font-black tracking-tight">Gujarat, India</h3>
+              <LiveClock />
+            </div>
+          </BentoCard>
 
-          {/* Right Side - Scrollable Content */}
-          <div className="lg:col-span-2 space-y-12">
-            {/* Education Timeline */}
-            <section className="animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-              <h2 className="text-3xl font-bold text-foreground mb-8 flex items-center">
-                <GraduationCap className="w-8 h-8 text-primary mr-3" />
-                Education Journey
-              </h2>
+          {/* 3. Education (Stats style) */}
+          <BentoCard className="md:col-span-4 bg-primary text-primary-foreground border-none flex flex-col justify-between" delay={0.3}>
+            <Award className="w-12 h-12 mb-6 opacity-50" />
+            <div className="space-y-1 text-left">
+              <h3 className="text-6xl font-black">9.76</h3>
+              <p className="text-sm font-black uppercase tracking-[0.2em] opacity-80">Academy GPA Score</p>
+            </div>
+            <div className="mt-8 pt-6 border-t border-white/20 text-left text-xs font-bold uppercase tracking-widest opacity-70 leading-relaxed">
+              B.Tech Computer Science and Engineering<br />Rai University Systems
+            </div>
+          </BentoCard>
 
-              <div className="relative">
-                {/* Timeline line */}
-                <div className="absolute left-4 top-0 bottom-0 w-0.5 bg-gradient-to-b from-primary via-accent to-primary/20" />
+          {/* 4. Skills Registry (Categorized) */}
+          <BentoCard className="md:col-span-12" delay={0.4}>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
-                <div className="space-y-8">
-                  {educationData.map((edu, index) => (
-                    <div key={index} className="relative flex items-start space-x-6 group">
-                      {/* Timeline dot */}
-                      <div className="relative z-10 flex-shrink-0">
-                        <div className="w-8 h-8 bg-primary rounded-full flex items-center justify-center group-hover:scale-110 transition-transform duration-200">
-                          <div className="w-3 h-3 bg-primary-foreground rounded-full" />
-                        </div>
-                      </div>
-
-                      {/* Content card */}
-                      <div className="flex-1 bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-300 group-hover:border-primary/30">
-                        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3">
-                          <h3 className="text-lg font-semibold text-foreground">{edu.degree}</h3>
-                          <div className="flex items-center text-sm text-primary font-medium">
-                            <Calendar className="w-4 h-4 mr-1" />
-                            {edu.year}
-                          </div>
-                        </div>
-
-                        <p className="text-accent font-medium mb-2">{edu.field}</p>
-                        <p className="text-muted-foreground mb-2">{edu.institution}</p>
-                        <p className="text-sm font-medium text-primary mb-3">{edu.grade}</p>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{edu.description}</p>
-                      </div>
-                    </div>
-                  ))}
+              {/* Languages & Frameworks */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-border/20 pb-4">
+                  <Code2 className="w-5 h-5 text-primary" />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em]">Languages & Frameworks</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <TechPill icon={Terminal} label="JavaScript" />
+                  <TechPill icon={Cpu} label="C++" />
+                  <TechPill icon={Code2} label="React.js" />
+                  <TechPill icon={Layout} label="HTML5" />
+                  <TechPill icon={Layout} label="CSS3" />
+                  <TechPill icon={Layout} label="Tailwind CSS" />
+                  <TechPill icon={Layers} label="Material UI" />
+                  <TechPill icon={Layers} label="Redux Toolkit" />
                 </div>
               </div>
-            </section>
 
-            {/* Skills */}
-            <section className="animate-fade-in-up" style={{ animationDelay: "0.3s" }}>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Skills</h2>
-              <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {/* React */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiReact className="text-teal-400 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">React</span>
-                  </div>
-                  {/* MongoDB */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiMongodb className="text-emerald-500 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">MongoDB</span>
-                  </div>
-                  {/* Node.js */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiNodedotjs className="text-green-500 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">Node.js</span>
-                  </div>
-                  {/* Express.js */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiExpress className="text-stone-300 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">Express.js</span>
-                  </div>
-                  {/* CSS */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiCss3 className="text-blue-500 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">CSS</span>
-                  </div>
-                  {/* Tailwind CSS */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiTailwindcss className="text-cyan-400 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">Tailwind CSS</span>
-                  </div>
-                  {/* Material UI */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiMui className="text-sky-500 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">Material UI</span>
-                  </div>
-                  {/* JavaScript */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiJavascript className="text-amber-400 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">JavaScript</span>
-                  </div>
-                  {/* UI/UX */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiFigma className="text-rose-400 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">UI/UX</span>
-                  </div>
-                  {/* HTML */}
-                  <div className="flex items-center gap-3 p-3 rounded-lg border border-border bg-muted/40">
-                    <SiHtml5 className="text-orange-500 text-2xl" />
-                    <span className="text-sm font-medium text-foreground">HTML</span>
-                  </div>
+              {/* Backend & Databases */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-border/20 pb-4">
+                  <Server className="w-5 h-5 text-primary" />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em]">Backend & Databases</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <TechPill icon={Database} label="Node.js" />
+                  <TechPill icon={Server} label="Express.js" />
+                  <TechPill icon={Database} label="MongoDB" />
+                  <TechPill icon={Database} label="Mongoose" />
+                  <TechPill icon={Globe} label="RESTful APIs" />
+                  <TechPill icon={Globe} label="Cloudinary" />
+                  <TechPill icon={Cpu} label="JWT" />
+                  <TechPill icon={Cpu} label="Bcrypt" />
                 </div>
               </div>
-            </section>
 
-            {/* Detailed About Section */}
-            <section className="animate-fade-in-up" style={{ animationDelay: "0.4s" }}>
-              <h2 className="text-3xl font-bold text-foreground mb-8">About Myself</h2>
-
-              <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
-                <div className="prose prose-lg max-w-none">
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    Hello! I'm Yashvi Dholakiya, a passionate full-stack developer with a love for creating innovative
-                    digital solutions. My journey in technology began during my college years, where I discovered the
-                    power of code to transform ideas into reality.
-                  </p>
-
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    I specialize in modern web technologies including React, Next.js, Node.js, and various databases. My
-                    approach to development is centered around creating user-centric applications that not only look
-                    great but also provide exceptional user experiences.
-                  </p>
-
-                  <p className="text-muted-foreground leading-relaxed mb-6">
-                    When I'm not coding, you can find me exploring new technologies, contributing to open-source
-                    projects, or sharing my knowledge with the developer community. I believe in continuous learning and
-                    staying updated with the latest trends in technology.
-                  </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="font-semibold text-foreground mb-2">Technical Skills</h4>
-                      <p className="text-sm text-muted-foreground">
-                        React, Next.js, JavaScript, Node.js, SQL, MongoDB, AWS, Docker
-                      </p>
-                    </div>
-
-                    <div className="bg-muted/50 rounded-lg p-4">
-                      <h4 className="font-semibold text-foreground mb-2">Interests</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Web Development, UI/UX Design, Open Source
-                      </p>
-                    </div>
-                  </div>
+              {/* Tools & Platforms */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 border-b border-border/20 pb-4">
+                  <Wrench className="w-5 h-5 text-primary" />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em]">Tools & Platforms</h3>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  <TechPill icon={Github} label="Git" />
+                  <TechPill icon={Github} label="GitHub" />
+                  <TechPill icon={Terminal} label="Postman" />
+                  <TechPill icon={Globe} label="Vercel" />
+                  <TechPill icon={Globe} label="Netlify" />
+                  <TechPill icon={Globe} label="Render" />
                 </div>
               </div>
-            </section>
-          </div>
+
+            </div>
+          </BentoCard>
+
+          {/* 5. LinkedIn / Social */}
+          <BentoCard className="md:col-span-4 bg-[#0A66C2] text-white flex flex-col justify-between border-none group cursor-pointer" delay={0.5}>
+            <div className="flex justify-between items-start">
+              <Linkedin className="w-10 h-10" />
+              <div className="p-3 bg-white/20 rounded-2xl group-hover:bg-white group-hover:text-[#0A66C2] transition-all">
+                <ArrowUpRight className="w-6 h-6" />
+              </div>
+            </div>
+            <div className="text-left">
+              <h4 className="text-3xl font-black tracking-tighter">NETWORK</h4>
+              <p className="text-xs font-bold uppercase tracking-widest opacity-80">Synchronize Professional Data</p>
+            </div>
+            <Link href="https://www.linkedin.com/in/yashvi-dholakiya/" className="absolute inset-0" target="_blank" />
+          </BentoCard>
+
+          {/* 6. Experience Stats */}
+          <BentoCard className="md:col-span-4 flex flex-col justify-center items-center text-center py-12" delay={0.6}>
+            <span className="text-7xl font-black text-primary tracking-tighter">25+</span>
+            <span className="text-xs font-black uppercase tracking-[0.3em] text-muted-foreground mt-2">Successful Operations</span>
+          </BentoCard>
+
+          {/* 7. Philosophy/Quote (Large) */}
+          <BentoCard className="md:col-span-8 bg-muted/20 flex flex-col justify-center px-12 italic" delay={0.7}>
+            <div className="space-y-4">
+              <div className="text-primary text-6xl font-serif text-left opacity-30">"</div>
+              <p className="text-3xl font-serif text-foreground leading-snug">
+                The most powerful digital tool is not the code itself, but the clarity with which it solves human problems.
+              </p>
+              <div className="text-primary text-6xl font-serif text-right opacity-30">"</div>
+            </div>
+          </BentoCard>
+
         </div>
+
+        {/* Footer Link Page */}
+        <div className="pt-24 flex justify-center">
+          <Link href="/projects" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-all">
+            VIEW_RECORDS <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+          </Link>
+        </div>
+
       </div>
     </div>
   )

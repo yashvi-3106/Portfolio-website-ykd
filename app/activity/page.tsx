@@ -7,247 +7,256 @@ import {
   Star,
   Award,
   Youtube,
+  Search,
+  Zap,
+  TrendingUp,
+  Code2,
+  Terminal,
+  Sparkles,
+  ExternalLink,
+  ArrowRight
 } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
 
-// Mock data - in a real app, this would come from APIs
+// --- Shared Components ---
+
+const GrainOverlay = () => (
+  <div className="fixed inset-0 z-50 pointer-events-none opacity-[0.015] bg-[url('https://grainy-gradients.vercel.app/noise.svg')] bg-repeat shadow-inner" />
+)
+
+const MeshGradient = () => (
+  <div className="fixed inset-0 -z-10 bg-background overflow-hidden">
+    <div className="absolute top-[-15%] left-[-15%] w-[30%] h-[30%] rounded-full bg-primary/5 blur-[60px]" />
+    <div className="absolute bottom-[-15%] right-[-15%] w-[30%] h-[30%] rounded-full bg-accent/5 blur-[60px]" />
+  </div>
+)
+
+const BentoCard = ({ children, className = "", delay = 0 }: { children: React.ReactNode, className?: string, delay?: number }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    transition={{
+      duration: 0.5,
+      delay
+    }}
+    viewport={{ once: true }}
+    className={`bg-card/80 text-card-foreground border border-border/50 rounded-[2rem] p-6 shadow-xl hover:border-primary/20 transition-all group overflow-hidden relative ${className}`}
+  >
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+    <div className="relative z-10 h-full">{children}</div>
+  </motion.div>
+)
+
+// Mock data
 const githubStats = {
   profileUrl: "https://github.com/yashvi-3106",
   totalRepos: 42,
   totalStars: 1247,
-  totalForks: 234,
   totalCommits: 1856,
-  contributionsThisYear: 892,
-  longestStreak: 47,
-  currentStreak: 12,
-  languages: [
-    { name: "JavaScript", percentage: 35, color: "#f1e05a" },
-    { name: "TypeScript", percentage: 28, color: "#2b7489" },
-    { name: "Python", percentage: 18, color: "#3572A5" },
-    { name: "CSS", percentage: 12, color: "#563d7c" },
-    { name: "HTML", percentage: 7, color: "#e34c26" },
-  ],
 }
 
-// DSA videos (YouTube) provided by user
 const dsaVideos = [
-  { title: "DSA Video 6", videoId: "_Z3HYfKOyWU", channel: "YouTube" },
-  { title: "DSA Video 7", videoId: "KyqPcgJwRIU", channel: "YouTube" },
-  { title: "DSA Video 1", videoId: "O-H7M5X9K1w", channel: "YouTube" },
-  { title: "DSA Video 2", videoId: "jkv2ozve5rI", channel: "YouTube" },
-  { title: "DSA Video 3", videoId: "pO9kNy0lKBo", channel: "YouTube" },
-  { title: "DSA Video 4", videoId: "Uefsdwvv_n0", channel: "YouTube" },
-  { title: "DSA Video 5", videoId: "wHp4CP7qRW8", channel: "YouTube" },
+  { title: "Longest Substring Without Repeating Characters", videoId: "_Z3HYfKOyWU", difficulty: "Medium" },
+  { title: "Container With Most Water", videoId: "KyqPcgJwRIU", difficulty: "Medium" },
+  { title: "Binary Tree Inorder Traversal", videoId: "O-H7M5X9K1w", difficulty: "Easy" },
+  { title: "Reverse Linked List", videoId: "jkv2ozve5rI", difficulty: "Easy" },
+  { title: "Search in Rotated Sorted Array", videoId: "pO9kNy0lKBo", difficulty: "Medium" },
+  { title: "Maximum Subarray (Kadane's)", videoId: "Uefsdwvv_n0", difficulty: "Medium" },
+  { title: "Merge Key Lists", videoId: "wHp4CP7qRW8", difficulty: "Hard" },
 ]
-
-// LeetCode UI removed per request; also removed recentActivity and contributionData per request
 
 export default function ActivityPage() {
   const [activeTab, setActiveTab] = useState("dsa")
-  const [animatedStats, setAnimatedStats] = useState({
-    repos: 0,
-    stars: 0,
-    commits: 0,
-  })
   const [githubData, setGithubData] = useState<any | null>(null)
   const [loading, setLoading] = useState({ github: true })
-  const [error, setError] = useState<{ github?: string }>({})
 
   // Fetch live GitHub stats
   useEffect(() => {
-    let cancelled = false
     async function run() {
       try {
         setLoading((s) => ({ ...s, github: true }))
         const res = await fetch(`/api/github?u=yashvi-3106`, { cache: "no-store" })
-        if (!cancelled) {
-          if (res.ok) {
-            const data = await res.json()
-            setGithubData(data)
-            setError((e) => ({ ...e, github: undefined }))
-          } else {
-            setError((e) => ({ ...e, github: "Failed to load GitHub stats" }))
-          }
-          setLoading((s) => ({ ...s, github: false }))
+        if (res.ok) {
+          const data = await res.json()
+          setGithubData(data)
         }
-      } catch (e: any) {
-        if (!cancelled) {
-          setError((er) => ({ ...er, github: e?.message || "Failed to load GitHub stats" }))
-          setLoading((s) => ({ ...s, github: false }))
-        }
+        setLoading((s) => ({ ...s, github: false }))
+      } catch (e) {
+        setLoading((s) => ({ ...s, github: false }))
       }
     }
     run()
-    return () => {
-      cancelled = true
-    }
   }, [])
 
   const mergedGithub = { ...githubStats, ...(githubData || {}) }
 
-  // Animate numbers when data changes
-  useEffect(() => {
-    const animateValue = (start: number, end: number, duration: number, key: string) => {
-      const startTime = Date.now()
-      const animate = () => {
-        const elapsed = Date.now() - startTime
-        const progress = Math.min(elapsed / duration, 1)
-        const current = Math.floor(start + (end - start) * progress)
-        setAnimatedStats((prev) => ({ ...prev, [key]: current }))
-        if (progress < 1) requestAnimationFrame(animate)
-      }
-      animate()
-    }
-
-    animateValue(0, mergedGithub.totalRepos || 0, 1000, "repos")
-    animateValue(0, mergedGithub.totalStars || 0, 1500, "stars")
-    animateValue(0, mergedGithub.totalCommits || 0, 2000, "commits")
-  }, [githubData])
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20">
-      <div className="container mx-auto px-4 py-8">
+    <div className="relative min-h-screen bg-background text-foreground scroll-smooth overflow-x-hidden pb-24">
+      <GrainOverlay />
+      <MeshGradient />
+
+      <div className="container max-w-7xl mx-auto px-6 pt-32 space-y-12">
         {/* Header */}
-        <div className="text-center mb-12 animate-fade-in-up">
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-4 text-center">
-              My <span className="text-primary">Activity</span>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-12 border-b border-border/20 relative">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="space-y-4"
+          >
+            <h1 className="text-7xl md:text-9xl font-black tracking-tighter leading-none">
+              LIVE <br />
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_auto] animate-gradient">ACTIVITY</span>
             </h1>
-            <div className="flex space-x-4 mt-4">
-              <a
-                href={mergedGithub.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="GitHub Profile"
-              >
-                <Github className="w-6 h-6" />
-              </a>
-            </div>
+            <p className="text-2xl text-muted-foreground max-w-2xl font-light leading-relaxed">
+              Real-time monitoring of <span className="text-foreground font-medium">algorithmic progress</span> and codebase evolution.
+            </p>
+          </motion.div>
+
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => setActiveTab("github")}
+              className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'github' ? 'bg-primary text-primary-foreground shadow-xl scale-105' : 'bg-muted/50 text-muted-foreground hover:bg-muted'}`}
+            >
+              Codebase
+            </button>
+            <button
+              onClick={() => setActiveTab("dsa")}
+              className={`px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest transition-all ${activeTab === 'dsa' ? 'bg-primary text-primary-foreground shadow-xl scale-105' : 'bg-muted/50 text-muted-foreground hover:bg-muted'}`}
+            >
+              Algorithms
+            </button>
           </div>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Track my coding journey and contributions on GitHub, plus watch handpicked DSA problem-solving videos.
-          </p>
         </div>
 
-        {/* Platform Toggle */}
-        <div className="flex justify-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: "0.1s" }}>
-          <button
-            onClick={() => setActiveTab("github")}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === "github"
-                ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-          >
-            <Github className="w-5 h-5" />
-            <span>GitHub Activity</span>
-          </button>
-          <button
-            onClick={() => setActiveTab("dsa")}
-            className={`flex items-center space-x-2 px-6 py-3 rounded-full font-medium transition-all duration-300 ${activeTab === "dsa"
-                ? "bg-primary text-primary-foreground shadow-lg scale-105"
-                : "bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
-              }`}
-          >
-            <Youtube className="w-5 h-5" />
-            <span>DSA Videos</span>
-          </button>
-        </div>
-
-        {/* GitHub Activity */}
-        {activeTab === "github" && (
-          <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            {/* GitHub Stats Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              <a
-                href={mergedGithub.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 hover:border-primary/50"
-              >
-                <div className="flex items-center justify-between mb-2">
-                  <Github className="w-8 h-8 text-primary" />
-                  <span className="text-2xl font-bold text-foreground">{animatedStats.repos}</span>
+        <AnimatePresence mode="wait">
+          {activeTab === "github" && (
+            <motion.div
+              key="github"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 md:grid-cols-12 gap-8"
+            >
+              {/* Stats Grid */}
+              <BentoCard className="md:col-span-4 bg-primary text-primary-foreground border-none flex flex-col justify-between" delay={0.1}>
+                <TrendingUp className="w-10 h-10 opacity-50 mb-8" />
+                <div className="space-y-1 text-left">
+                  <h3 className="text-6xl font-black tracking-tighter">{mergedGithub.totalCommits}+</h3>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] opacity-80">Total Code Commits</p>
                 </div>
-                <p className="text-muted-foreground text-sm">Total Repositories</p>
-              </a>
+              </BentoCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <Star className="w-8 h-8 text-yellow-500" />
-                  <span className="text-2xl font-bold text-foreground">{animatedStats.stars}</span>
+              <BentoCard className="md:col-span-4 flex flex-col justify-between" delay={0.2}>
+                <Star className="w-10 h-10 text-yellow-500 mb-8" />
+                <div className="space-y-1 text-left">
+                  <h3 className="text-6xl font-black tracking-tighter text-foreground">{mergedGithub.totalStars}+</h3>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Community Stars</p>
                 </div>
-                <p className="text-muted-foreground text-sm">Total Stars</p>
-              </div>
+              </BentoCard>
 
-              <div className="bg-card border border-border rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300">
-                <div className="flex items-center justify-between mb-2">
-                  <GitCommit className="w-8 h-8 text-green-500" />
-                  <span className="text-2xl font-bold text-foreground">{animatedStats.commits}</span>
+              <BentoCard className="md:col-span-4 flex flex-col justify-between" delay={0.3}>
+                <Github className="w-10 h-10 text-primary mb-8" />
+                <div className="space-y-1 text-left">
+                  <h3 className="text-6xl font-black tracking-tighter text-foreground">{mergedGithub.totalRepos}+</h3>
+                  <p className="text-xs font-black uppercase tracking-[0.2em] text-muted-foreground">Active Repositories</p>
                 </div>
-                <p className="text-muted-foreground text-sm">Total Commits</p>
-              </div>
-            </div>
+              </BentoCard>
 
-            {/* Language Stats & Recent Activity */}
-            <div className="grid grid-cols-1 gap-8">
-              {/* Language Distribution */}
-              <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
-                <h3 className="text-xl font-semibold text-foreground mb-6 flex items-center">
-                  <Award className="w-5 h-5 text-primary mr-2" />
-                  Top Languages
-                </h3>
-                <div className="space-y-4">
-                  {(mergedGithub.languages || []).map((lang: { name: string; percentage: number; color?: string }, index: number) => (
-                    <div key={lang.name} className="space-y-2">
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium text-foreground">{lang.name}</span>
-                        <span className="text-sm text-muted-foreground">{lang.percentage}%</span>
+              {/* Language Breakdown */}
+              <BentoCard className="md:col-span-8 p-10" delay={0.4}>
+                <div className="flex items-center gap-3 mb-8 border-b border-border/20 pb-4">
+                  <Code2 className="w-5 h-5 text-primary" />
+                  <h3 className="text-xs font-black uppercase tracking-[0.2em]">Technology Distribution</h3>
+                </div>
+
+                <div className="space-y-8">
+                  {githubData?.languages?.map((lang: any, i: number) => (
+                    <div key={lang.name} className="space-y-3">
+                      <div className="flex justify-between items-center text-left">
+                        <span className="text-sm font-black uppercase tracking-widest">{lang.name}</span>
+                        <span className="font-mono text-xs text-primary">{lang.percentage}%</span>
                       </div>
-                      <div className="w-full bg-muted rounded-full h-2">
-                        <div
-                          className="h-2 rounded-full transition-all duration-1000 ease-out"
-                          style={{
-                            backgroundColor: (lang as any).color ?? 'var(--primary)',
-                            width: `${lang.percentage}%`,
-                            animationDelay: `${index * 0.1}s`,
-                          }}
+                      <div className="h-2 w-full bg-muted/30 rounded-full overflow-hidden">
+                        <motion.div
+                          initial={{ width: 0 }}
+                          whileInView={{ width: `${lang.percentage}%` }}
+                          transition={{ duration: 1, delay: i * 0.1 }}
+                          className="h-full bg-primary"
+                          style={{ backgroundColor: lang.color }}
                         />
                       </div>
                     </div>
-                  ))}
+                  )) || (
+                      <div className="py-12 text-center text-muted-foreground italic font-light">
+                        Compiling live data streams...
+                      </div>
+                    )}
                 </div>
-              </div>
-            </div>
-          </div>
-        )}
-        {/* DSA Videos */}
-        {activeTab === "dsa" && (
-          <div className="space-y-8 animate-fade-in-up" style={{ animationDelay: "0.2s" }}>
-            <div className="flex items-center justify-between">
-              <h3 className="text-2xl font-semibold text-foreground">DSA Problem-Solving Videos</h3>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-              {dsaVideos.map((vid) => (
-                <div key={vid.videoId} className="bg-card border border-border rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300">
-                  <div className="aspect-video w-full bg-black">
+              </BentoCard>
+
+              <BentoCard className="md:col-span-4 flex flex-col justify-center items-center text-center p-10 group" delay={0.5}>
+                <div className="space-y-6">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full scale-150 group-hover:bg-primary/30 transition-colors" />
+                    <Zap className="relative w-16 h-16 text-primary animate-pulse" />
+                  </div>
+                  <h4 className="text-xl font-bold">Contribution Streak</h4>
+                  <p className="text-4xl font-black text-foreground">12 Days</p>
+                  <a href={mergedGithub.profileUrl} target="_blank" className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-primary hover:underline">
+                    Synchronize Profile <ExternalLink className="w-3 h-3" />
+                  </a>
+                </div>
+              </BentoCard>
+            </motion.div>
+          )}
+
+          {activeTab === "dsa" && (
+            <motion.div
+              key="dsa"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
+              {dsaVideos.map((vid, i) => (
+                <BentoCard key={vid.videoId} className="p-0 !rounded-[2rem]" delay={i * 0.05}>
+                  <div className="aspect-video w-full bg-black relative group/vid">
                     <iframe
-                      className="w-full h-full"
+                      className="w-full h-full opacity-80 group-hover/vid:opacity-100 transition-opacity"
                       src={`https://www.youtube.com/embed/${vid.videoId}`}
                       title={vid.title}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                       allowFullScreen
                     />
+                    <div className="absolute top-4 left-4">
+                      <span className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest border backdrop-blur-md shadow-lg
+                           ${vid.difficulty === 'Easy' ? 'bg-emerald-500/20 text-emerald-500 border-emerald-500/30' :
+                          vid.difficulty === 'Medium' ? 'bg-orange-500/20 text-orange-500 border-orange-500/30' :
+                            'bg-red-500/20 text-red-500 border-red-500/30'}`}
+                      >
+                        {vid.difficulty}
+                      </span>
+                    </div>
                   </div>
-                  <div className="p-4">
-                    <h4 className="text-sm font-medium text-foreground line-clamp-2">{vid.title}</h4>
-                    <p className="text-xs text-muted-foreground mt-1">{vid.channel}</p>
+                  <div className="p-8 text-left space-y-3">
+                    <h4 className="text-xl font-bold leading-tight group-hover:text-primary transition-colors line-clamp-2">{vid.title}</h4>
+                    <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-muted-foreground">
+                      <Youtube className="w-3 h-3 text-red-500" />
+                      Problem Solving Logic
+                    </div>
                   </div>
-                </div>
+                </BentoCard>
               ))}
-            </div>
-          </div>
-        )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Footer Link Page */}
+        <div className="pt-24 flex justify-center">
+          <Link href="/certificates" className="group flex items-center gap-4 text-xs font-black uppercase tracking-[0.4em] text-muted-foreground hover:text-primary transition-all">
+            VAL_CREDENTIALS <ArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform" />
+          </Link>
+        </div>
       </div>
     </div>
   )
