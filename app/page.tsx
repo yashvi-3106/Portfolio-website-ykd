@@ -179,7 +179,7 @@ export default function HomePage() {
 
             <div className="h-full w-full aspect-video md:aspect-auto md:h-[500px]">
               <iframe
-                src="https://www.youtube.com/embed/SUTEDFt9yQY?autoplay=1&mute=1&loop=1&playlist=SUTEDFt9yQY&controls=0&modestbranding=1"
+                src="https://www.youtube.com/embed/SUTEDFt9yQY?autoplay=1&loop=1&playlist=SUTEDFt9yQY&controls=0&modestbranding=1"
                 className="w-full h-full object-cover grayscale-0 opacity-100 transition-all duration-700 group-hover:scale-105"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -206,7 +206,7 @@ export default function HomePage() {
                 <Terminal className="w-6 h-6 text-primary" />
                 <span className="text-[10px] font-black uppercase tracking-widest text-muted-foreground/50">Core_Engine</span>
               </div>
-              <h4 className="text-2xl font-black tracking-tight leading-tight">MERN Stack Deployment Specialist</h4>
+              <h4 className="text-2xl font-black tracking-tight leading-tight">Full Stack Deployment Specialist</h4>
               <div className="pt-4 border-t border-white/5">
                 <div className="flex gap-4">
                   <Database className="w-4 h-4 text-muted-foreground" />
@@ -249,7 +249,7 @@ export default function HomePage() {
             <div className="flex justify-between items-center px-4">
               {[
                 { icon: Github, href: "https://github.com/yashvi-3106" },
-                { icon: Linkedin, href: "#" },
+                { icon: Linkedin, href: "https://linkedin.com/in/yashvi-dholakiya/" },
                 { icon: Mail, href: "mailto:yashvidholakiya.cg@gmail.com" }
               ].map((social, i) => (
                 <a key={i} href={social.href} data-text="CONNECT" className="p-4 rounded-2xl bg-white/5 hover:bg-primary transition-all hover:-translate-y-2">

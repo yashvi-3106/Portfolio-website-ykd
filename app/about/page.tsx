@@ -173,12 +173,12 @@ export default function AboutPage() {
           <BentoCard className="md:col-span-4 bg-primary/5 flex flex-col items-center justify-center text-center gap-6 group" delay={0.2} data-text="GUJARAT">
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-2xl rounded-full scale-150 group-hover:bg-primary/40 transition-colors" />
-              <div className="relative w-20 h-20 bg-card rounded-3xl border border-border flex items-center justify-center shadow-2xl transform group-hover:rotate-12 transition-transform duration-500">
+              {/* <div className="relative w-20 h-20 bg-card rounded-3xl border border-border flex items-center justify-center shadow-2xl transform group-hover:rotate-12 transition-transform duration-500">
                 <MapPin className="w-10 h-10 text-primary" />
-              </div>
+              </div> */}
             </div>
             <div className="space-y-1">
-              <h3 className="text-2xl font-black tracking-tight">Gujarat, India</h3>
+              <h3 className="text-2xl font-black tracking-tight">3rd Year B.Tech CSE Student, Rai University X CodingGita</h3>
               <LiveClock />
             </div>
           </BentoCard>
